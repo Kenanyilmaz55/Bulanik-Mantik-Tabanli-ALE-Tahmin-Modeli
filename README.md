@@ -200,10 +200,10 @@ En problemli tahminlerin detaylı analizi:
 
 ## 📁 Proje Yapısı
 ```
-wsn_fuzzy_system/
+Bulanik_Mantik_Tabanli_ALE_Tahmin_Modeli/
 │
-├── wsn_data_analyzer.py        # Veri analizi modülü
-├── fuzzy_wsn_system.py         # Bulanık mantık sistemi
+├── veri_analizi.py        # Veri analizi modülü
+├── fuzzy_sistem.py         # Bulanık mantık sistemi
 ├── veri.csv                    # Veri dosyası
 ├── README.md                   # Bu dosya
 
@@ -231,7 +231,7 @@ wsn_fuzzy_system/
 ## 📊 Çıktı Örnekleri
 
 ### Veri Analizi Çıktıları
-```
+
 === VERİ ANALİZİ ===
 
 
@@ -242,7 +242,7 @@ wsn_fuzzy_system/
 
 === FUZZY LOGIC SİSTEM SONUÇLARI ===
 
-```
+
 
 ### Görsel Çıktılar
 ![Proje Ekran Görüntüsü](ciktilar/model_sonuclari.png)
