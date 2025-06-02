@@ -1,0 +1,1 @@
+# Bulan-k-Mant-k-Tabanl-ALE-Tahmin-Modeli
