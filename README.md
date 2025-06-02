@@ -33,11 +33,11 @@ Sistem aşağıdaki sütunları içeren CSV dosyalarını işler:
 3. **node_density**: Düğüm yoğunluğu (100, 200, 300)
 4. **iterations**: Yineleme sayısı (14-100 arası)
 5. **ale**: Average Localization Error - Hedef değişken (0.39-2.57 arası)
-6. **std_dev**: Standart sapma 
+
 
 ### Veri Özellikleri
 - **Beklenen satır sayısı**: 107
-- **Sütun sayısı**: 6
+- **Sütun sayısı**: 5
 - **Veri tipi**: Tüm sütunlar sayısal
 - **Hedef değişken**: ALE değeri 
 
@@ -45,30 +45,32 @@ Sistem aşağıdaki sütunları içeren CSV dosyalarını işler:
 
 ### 1. Temel Veri Analizi
 ```python
-from wsn_data_analyzer import load_and_analyze_csv
-
 # Veri yükleme ve analizi
-data_array, data_df = load_and_analyze_csv('veri.csv')
+veri_analizi.py dosyası çalıştırılarak veriler analiz edilir
+
+# Fuzzy sistemin çalıştırılması
+fuzzy_sistem.py dosyası çalıştırılarak model sonuçları alınarak 32 adet sonuçtan en iyi model tespit edilir.
 ```
 
 ### 2. Bulanık Mantık Sistemi
 ```python
-# Bulanık sistem çalıştırma
-python fuzzy_wsn_system.py
+
+# Fuzzy sistemin çalıştırılması
+fuzzy_sistem.py dosyası çalıştırılarak model sonuçları alınarak 32 adet sonuçtan en iyi model tespit edilir.
 ```
 
-### 3. Tam Analiz Pipeline
-```bash
-# Önce veri analizi
-python veri_analizi.py
-
-# Sonra bulanık sistem
-python fuzzy_sistem.py
-```
 
 ## 🧠 Bulanık Mantık Sistemi Özellikleri
 
 ### 1. Üyelik Fonksiyonları
+
+| Fonksiyon       | Parametreleri      | Nasıl Tespit Edilir?                              |
+| --------------- | ------------------ | ------------------------------------------------- |
+| **Triangular**  | `a`, `b`, `c`      | a: min, b: ortalama/medyan, c: max                |
+| **Trapezoidal** | `a`, `b`, `c`, `d` | a: alt sınır, b–c: çoğunluk bölgesi, d: üst sınır |
+| **Gaussian**    | `μ`, `σ`           | μ: ortalama, σ: standart sapma                    |
+| **Sigmoid**     | `a`, `c`           | c: eşik nokta (örneğin medyan), a: eğim kontrolü  |
+- Üyelik fonksiyon parametreleri yukarıdaki gibi belirlenmiştir .Daha sonrasında veri analizindeki ale değerleri ile sutunların ilişkilerine bakılarak ve tahmin değerindeki artışa göre değerler optimize edilmiştir
 
 #### Optimized Triangular (Üçgen)
 - **Anchor Ratio**: low(7-15-18), medium(15-18-30), high(18-30-33)
@@ -88,13 +90,17 @@ python fuzzy_sistem.py
 #### Optimized Trapezoidal (Yamuk)
 - Daha yumuşak geçişler için yamuk üyelik fonksiyonları
 
-### 2. Kural Tabanı (27 Kural)
+### 2. Kural Tabanı (18 Kural)
 
 Korelasyon analizi sonuçlarına göre optimize edilmiş kurallar:
-- **Iterations ↔ ALE**: Negatif korelasyon (-0.46) - güçlü
-- **Anchor Ratio ↔ ALE**: Negatif korelasyon (-0.35) - orta
-- **Node Density ↔ ALE**: Negatif korelasyon (-0.30) - orta
-- **Trans Range ↔ ALE**: Pozitif korelasyon (0.44) - güçlü
+-	Her kural için önem ağırlığı 1.0 ile 5.0 arasında tanımlanmıştır.
+-	Ağırlıklandırma sürecinde şu kriterler dikkate alınmıştır:
+-	Korelasyon Katsayıları: Değişkenlerin ale ile olan ilişkisi doğrudan dikkate alınarak, yüksek mutlak korelasyon değerine sahip değişkenler içeren kurallara daha yüksek ağırlıklar verilmiştir.
+-	Kombinasyon Gücü: Birden fazla değişkeni içeren ve birlikte anlamlı sonuçlar üreten kurallar, tek değişkene dayanan kurallara kıyasla daha yüksek ağırlıkla tanımlanmıştır.
+-	Veri Dağılımı ve Temsil Gücü: Sıkça rastlanan değer aralıklarını kapsayan kurallara daha yüksek öncelik verilmiştir.
+-	Bu sayede, sistemin hem doğruluğu hem de genellenebilirliği artırılmıştır.
+-	Korelasyon analizi ve sezgisel bilgiden faydalanılarak toplam 18 adet kural tanımlanmıştır.
+-	Her kural: antecedent (koşullar), consequent (sonuç) ve ağırlık içerir.
 
 ```python
 # Örnek kurallar
@@ -111,8 +117,8 @@ Korelasyon analizi sonuçlarına göre optimize edilmiş kurallar:
 4. **Center of Sums (COS)**: Gelişmiş ağırlık merkezi
 
 ### 4. Agregasyon Yöntemleri
-- **MIN**: Minimum operatörü 
-- **PROD**: Çarpım operatörü 
+- **MIN**: Minimum operatörü (klasik)
+- **PROD**: Çarpım operatörü (yumuşak)
 
 ## 📈 Model Performansı
 
@@ -132,7 +138,7 @@ Korelasyon analizi sonuçlarına göre optimize edilmiş kurallar:
 ### 1. Otomatik Veri Temizleme
 - Eksik değer tespiti ve doldurma
 - Aykırı değer analizi (IQR yöntemi)
-- std_ale sutunun çıkarılması
+- ALE > 2 değerlerinin otomatik filtrelenmesi
 
 ### 2. İstatistiksel Analiz
 - Temel istatistikler (ortalama, medyan, standart sapma)
@@ -149,51 +155,26 @@ Korelasyon analizi sonuçlarına göre optimize edilmiş kurallar:
 
 ## 🛠️ Gelişmiş Özellikler
 
+### 1. Lineer Düzeltme
+Sistem bias'ını düzeltmek için otomatik lineer regresyon:
+```python
+# Eğim ve bias düzeltmesi
+reg = LinearRegression().fit(y_pred.reshape(-1, 1), y_true)
+y_pred_corrected = reg.predict(y_pred.reshape(-1, 1))
+```
 
-### 1. Hata Analizi
+### 2. Hata Analizi
 En problemli tahminlerin detaylı analizi:
 - En yüksek 20 hatalı tahminin listelenmesi
 - Hata kaynaklarının belirlenmesi
 - Model zayıflıklarının tespiti
 
-### 2. Otomatik Model Seçimi
+### 3. Otomatik Model Seçimi
 - 32 farklı kombinasyonun otomatik test edilmesi
 - En düşük MAE değerine sahip modelin seçilmesi
 - Performans metriklerinin karşılaştırılması
 
-## 📊 Çıktı Örnekleri
 
-### Konsol Çıktısı
-```
-=== VERİ ANALİZİ ===
-Veri seti boyutu: (107, 6)
-
-Değişkenler arası korelasyon (ALE ile):
-iterations        -0.461234
-trans_range        0.441876
-anchor_ratio      -0.351234
-node_density      -0.301456
-
-=== FUZZY LOGIC SİSTEM SONUÇLARI ===
-Model                Method       Agg   MAE      RMSE     R²
------------------------------------------------------------------
-Hybrid_Optimized     weighted_avg min   0.1250   0.1890   0.8750
-Optimized_Gauss      centroid     min   0.1320   0.1950   0.8650
-
-=== EN İYİ MODEL ===
-Model: Hybrid_Optimized
-Method: weighted_avg
-Aggregation: min
-MAE: 0.1250
-RMSE: 0.1890
-R²: 0.8750
-```
-
-### Görsel Çıktılar
-1. **Veri Dağılımları**: 5 adet histogram
-2. **Korelasyon Matrisi**: Isı haritası
-3. **ALE İlişki Grafikleri**: 4 adet scatter plot
-4. **Model Performansı**: 4'lü görselleştirme paneli
 
 ## 🚨 Hata Yönetimi
 
@@ -221,28 +202,21 @@ R²: 0.8750
 ```
 wsn_fuzzy_system/
 │
-├── veri_analizir.py        # Veri analizi modülü
-├── fuzzy_sistem.py         # Bulanık mantık sistemi
+├── wsn_data_analyzer.py        # Veri analizi modülü
+├── fuzzy_wsn_system.py         # Bulanık mantık sistemi
 ├── veri.csv                    # Veri dosyası
 ├── README.md                   # Bu dosya
-├── requirements.txt            # Gereksinimler
+
 ```
 
-## 🎯 Kullanım Alanları
 
-- **Kablosuz Sensör Ağları Optimizasyonu**
-- **Lokalizasyon Algoritması Geliştirme**  
-- **IoT Sistem Tasarımı**
-- **Bulanık Mantık Araştırmaları**
-- **Makine Öğrenmesi Karşılaştırmaları**
-- **Akademik Çalışmalar ve Tezler**
 
 ## 🔬 Teknik Detaylar
 
 ### Algoritma Akışı
 1. **Veri Ön İşleme**: Temizleme, filtreleme, normalizasyon
 2. **Üyelik Fonksiyonu Hesaplama**: Her özellik için fuzzy değerler
-3. **Kural Değerlendirme**: 27 kuralın ağırlıklı aktivasyonu
+3. **Kural Değerlendirme**: 18 kuralın ağırlıklı aktivasyonu
 4. **Agregasyon**: MIN/PROD operatörleri ile birleştirme
 5. **Defuzzification**: Crisp çıkış değeri hesaplama
 6. **Performans Değerlendirme**: MAE, RMSE, R² hesaplama
@@ -251,24 +225,32 @@ wsn_fuzzy_system/
 - **Korelasyon Tabanlı Kural Ağırlıkları**: İstatistiksel analiz sonuçlarına göre
 - **Hibrit Üyelik Fonksiyonları**: Farklı fonksiyon türlerinin optimal kombinasyonu
 - **Adaptif Parametre Ayarları**: Veri dağılımına göre otomatik ayarlama
+- **Bias Düzeltme**: Lineer regresyon ile sistematik hata düzeltimi
 
-## 📝 Model Karşılaştırması
 
-### Üyelik Fonksiyonu Performansları
-| Model Type | En İyi MAE | En İyi RMSE | En İyi R² |
-|------------|------------|-------------|-----------|
-| Hybrid     | 0.1250     | 0.1890      | 0.8750    |
-| Gaussian   | 0.1320     | 0.1950      | 0.8650    |
-| Triangular | 0.1380     | 0.2010      | 0.8580    |
-| Trapezoidal| 0.1420     | 0.2080      | 0.8520    |
+## 📊 Çıktı Örnekleri
 
-### Defuzzification Yöntem Karşılaştırması
-| Yöntem | Hız | Doğruluk | Kararlılık |
-|--------|-----|----------|------------|
-| Weighted Avg | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| Centroid | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| COS | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| Max Member | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ |
+### Veri Analizi Çıktıları
+```
+=== VERİ ANALİZİ ===
+
+
+![Proje Ekran Görüntüsü](ciktilar/veri_seti_ozellik_dagilimi.png)
+![Proje Ekran Görüntüsü](ciktilar/korelasyon.png)
+![Proje Ekran Görüntüsü](ciktilar/sutunların_ale_ile_ilişkisi.png)
+
+
+=== FUZZY LOGIC SİSTEM SONUÇLARI ===
+
+```
+
+### Görsel Çıktılar
+![Proje Ekran Görüntüsü](ciktilar/model_sonuclari.png)
+![Proje Ekran Görüntüsü](ciktilar/en_hatali_tahminler.png)
+![Proje Ekran Görüntüsü](ciktilar/sonuc.png)
+![Proje Ekran Görüntüsü](ciktilar/en_iyi_model_sonucu.png)
+
+
 
 
 ## 📄 Lisans
@@ -276,9 +258,4 @@ wsn_fuzzy_system/
 Bu proje MIT lisansı altında açık kaynak kodlu olarak sunulmaktadır. Eğitim ve araştırma amaçlı kullanım için serbesttir.
 
 
-## 🏆 Performans Benchmarkları
-
-### Diğer Yöntemlerle Karşılaştırma
-
-
-Bu README dosyası,  Bulanık Mantık Analiz Sistemi'nin tüm özelliklerini ve kullanım şekillerini kapsamlı bir şekilde açıklamaktadır. Sistem, hem araştırmacılar hem de pratik uygulamalar için optimize edilmiş bir çözüm sunmaktadır.
+Bu README dosyası, WSN Bulanık Mantık Analiz Sistemi'nin tüm özelliklerini ve kullanım şekillerini kapsamlı bir şekilde açıklamaktadır. Sistem, hem araştırmacılar hem de pratik uygulamalar için optimize edilmiş bir çözüm sunmaktadır.
