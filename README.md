@@ -7,6 +7,17 @@ Bu proje, Kablosuz Sensör Ağlarında (Wireless Sensor Networks - WSN) Ortalama
 1. **Veri Analizi Modülü**: Veri yükleme, temizleme, analiz ve görselleştirme
 2. **Bulanık Mantık Sistemi**: Çoklu üyelik fonksiyonları ve defuzzification yöntemleri ile ALE tahmini
 
+## 📁 Proje Yapısı
+```
+Bulanik_Mantik_Tabanli_ALE_Tahmin_Modeli/
+│
+├── veri_analizi.py        # Veri analizi modülü
+├── fuzzy_sistem.py         # Bulanık mantık sistemi
+├── veri.csv                    # Veri dosyası
+├── README.md                   # Bu dosya
+
+```
+
 ## 🔧 Gereksinimler
 
 ### Gerekli Python Kütüphaneleri
@@ -117,8 +128,8 @@ Korelasyon analizi sonuçlarına göre optimize edilmiş kurallar:
 4. **Center of Sums (COS)**: Gelişmiş ağırlık merkezi
 
 ### 4. Agregasyon Yöntemleri
-- **MIN**: Minimum operatörü (klasik)
-- **PROD**: Çarpım operatörü (yumuşak)
+- **MIN**: Minimum operatörü 
+- **PROD**: Çarpım operatörü 
 
 ## 📈 Model Performansı
 
@@ -198,16 +209,6 @@ En problemli tahminlerin detaylı analizi:
    ```
    **Çözüm**: Üyelik fonksiyonu parametrelerini kontrol edin.
 
-## 📁 Proje Yapısı
-```
-Bulanik_Mantik_Tabanli_ALE_Tahmin_Modeli/
-│
-├── veri_analizi.py        # Veri analizi modülü
-├── fuzzy_sistem.py         # Bulanık mantık sistemi
-├── veri.csv                    # Veri dosyası
-├── README.md                   # Bu dosya
-
-```
 
 
 
