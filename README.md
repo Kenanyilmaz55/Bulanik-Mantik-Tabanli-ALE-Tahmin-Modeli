@@ -80,7 +80,7 @@ fuzzy_sistem.py dosyası çalıştırılarak model sonuçları alınarak 32 adet
 | **Triangular**  | `a`, `b`, `c`      | a: min, b: ortalama/medyan, c: max                |
 | **Trapezoidal** | `a`, `b`, `c`, `d` | a: alt sınır, b–c: çoğunluk bölgesi, d: üst sınır |
 | **Gaussian**    | `μ`, `σ`           | μ: ortalama, σ: standart sapma                    |
-| **Sigmoid**     | `a`, `c`           | c: eşik nokta (örneğin medyan), a: eğim kontrolü  |
+| **Hybrit**      |                    | karma üyelik fonksiyonları kullanılır             |
 - Üyelik fonksiyon parametreleri yukarıdaki gibi belirlenmiştir .Daha sonrasında veri analizindeki ale değerleri ile sutunların ilişkilerine bakılarak ve tahmin değerindeki artışa göre değerler optimize edilmiştir
 
 #### Optimized Triangular (Üçgen)
