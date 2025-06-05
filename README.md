@@ -148,7 +148,6 @@ Korelasyon analizi sonuçlarına göre optimize edilmiş kurallar:
 ### 1. Otomatik Veri Temizleme
 - Eksik değer tespiti ve doldurma
 - Aykırı değer analizi (IQR yöntemi)
-- ALE > 2 değerlerinin otomatik filtrelenmesi
 
 ### 2. İstatistiksel Analiz
 - Temel istatistikler (ortalama, medyan, standart sapma)
