@@ -59,8 +59,7 @@ Sistem aşağıdaki sütunları içeren CSV dosyalarını işler:
 # Veri yükleme ve analizi
 veri_analizi.py dosyası çalıştırılarak veriler analiz edilir
 
-# Fuzzy sistemin çalıştırılması
-fuzzy_sistem.py dosyası çalıştırılarak model sonuçları alınarak 32 adet sonuçtan en iyi model tespit edilir.
+
 ```
 
 ### 2. Bulanık Mantık Sistemi
