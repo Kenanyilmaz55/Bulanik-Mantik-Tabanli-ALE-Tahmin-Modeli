@@ -11,10 +11,9 @@ Bu proje, Kablosuz Sensör Ağlarında (Wireless Sensor Networks - WSN) Ortalama
 ```
 Bulanik_Mantik_Tabanli_ALE_Tahmin_Modeli/
 │
-├── veri_analizi.py        # Veri analizi modülü
-├── fuzzy_sistem.py         # Bulanık mantık sistemi
-├── veri.csv                    # Veri dosyası
-├── README.md                   # Bu dosya
+├── Bulanik-Mantik-Tabanli-ALE-Tahmin-Modeli         # Veri analizi ve Bulanık mantık sistemi 
+├── veri.csv                                         # Veri dosyası
+├── README.md                                        # Bu dosya
 
 ```
 
@@ -29,10 +28,6 @@ seaborn >= 0.11.0
 scikit-learn >= 1.0.0
 ```
 
-### Kurulum
-```bash
-pip install pandas numpy matplotlib seaborn scikit-learn
-```
 
 ## 📊 Veri Seti Formatı
 
