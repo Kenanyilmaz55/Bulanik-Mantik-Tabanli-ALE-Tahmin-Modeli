@@ -47,22 +47,6 @@ Sistem aşağıdaki sütunları içeren CSV dosyalarını işler:
 - **Veri tipi**: Tüm sütunlar sayısal
 - **Hedef değişken**: ALE değeri 
 
-## 🚀 Kullanım
-
-### 1. Temel Veri Analizi
-```python
-# Veri yükleme ve analizi
-veri_analizi.py dosyası çalıştırılarak veriler analiz edilir
-
-
-```
-
-### 2. Bulanık Mantık Sistemi
-```python
-
-# Fuzzy sistemin çalıştırılması
-fuzzy_sistem.py dosyası çalıştırılarak model sonuçları alınarak 32 adet sonuçtan en iyi model tespit edilir.
-```
 
 
 ## 🧠 Bulanık Mantık Sistemi Özellikleri
